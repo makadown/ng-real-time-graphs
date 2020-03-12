@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { ChartsModule } from 'ng2-charts';
 import { GraficaComponent } from './components/grafica/grafica.component';
+import { HttpClientModule } from '@angular/common/http';
  
 // Aqui va el URL del server
 const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
@@ -17,7 +18,8 @@ const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
   imports: [
     BrowserModule,
     SocketIoModule.forRoot(config),
-    ChartsModule
+    ChartsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
