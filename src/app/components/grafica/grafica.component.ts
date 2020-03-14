@@ -4,6 +4,7 @@ import { Label } from 'ng2-charts';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { WebsocketService } from 'src/app/services/websocket.service';
 
 @Component({
   selector: 'app-grafica',
@@ -17,10 +18,12 @@ export class GraficaComponent implements OnInit, OnDestroy {
     { data: [65, 59, 80, 81], label: 'Ventas' }
   ];
   public lineChartLabels: Label[] = ['Enero', 'Febrero', 'Marzo', 'Abril'];
-  constructor(private http: HttpClient) { }
+
+  constructor(private http: HttpClient, public wsService: WebsocketService) { }
 
   ngOnInit() {
     this.getData();
+    this.escucharSocket();
   }
 
   getData() {
@@ -34,5 +37,12 @@ export class GraficaComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.onDestroy$.next();
     this.onDestroy$.complete();
+  }
+
+  escucharSocket() {
+    this.wsService.listen('cambio-grafica').pipe(takeUntil(this.onDestroy$))
+      .subscribe((data: any[]) => {
+        this.lineChartData = [...data];
+      });
   }
 }
